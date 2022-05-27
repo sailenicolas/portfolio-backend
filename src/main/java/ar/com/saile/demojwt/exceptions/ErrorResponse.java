@@ -2,12 +2,12 @@ package ar.com.saile.demojwt.exceptions;
 
 import lombok.Data;
 
-import java.util.List;
+import java.util.Map;
 
 @Data
 public class ErrorResponse {
 
-    public ErrorResponse(String message, List<String> details) {
+    public ErrorResponse(String message, Map<String, String> details) {
 
         super();
         this.message = message;
@@ -16,5 +16,6 @@ public class ErrorResponse {
 
     private String message;
 
-    private List<String> details;
+    private Map<String, String> details;
+
 }

@@ -39,11 +39,10 @@ public class CustomAuthorizationFilter extends BasicAuthenticationFilter {
 
         String header = request.getHeader(AUTHORIZATION);
 
-        if (header == null || !header.startsWith(TOKEN_PREFIX)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
         try {
+            if (header == null || !header.startsWith(TOKEN_PREFIX)) {
+                throw new JWTVerificationException("NOT AUTH PERMITED");
+            }
             UsernamePasswordAuthenticationToken authentication = getAuthentication(request);
             SecurityContextHolder.getContext().setAuthentication(authentication);
             filterChain.doFilter(request, response);
