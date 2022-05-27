@@ -1,22 +1,20 @@
 package ar.com.saile.demojwt.service;
 
 import ar.com.saile.demojwt.domain.*;
+import org.springframework.data.domain.Page;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Optional;
 
 public interface UserService {
 
     AppUser saveUser(AppUser appUser);
-    AppProject saveProject(AppProject appProject);
-    AppSoftSkill saveSoftSkills(AppSoftSkill appSoftSkill);
-    AppEducation saveEducation(AppEducation appEducation);
-    AppExperience saveExperience(AppExperience appExperience);
 
     AppRole addRole(AppRole appRole);
 
     void addRoleToUser(String username, String roleName);
 
-    List<AppUser> getUsers();
+    Page<AppUser> getUsers();
 
     AppRole saveRole(AppRole appRole);
 
@@ -27,4 +25,13 @@ public interface UserService {
     void addEducationToUser(String username, AppEducation appEducation);
 
     void addExperienceToUser(String username, AppExperience appExperience);
+
+    Optional<AppUser> findByUsername(AppUser appUser);
+
+    AppUser findByUsername(String username);
+
+    void addUserToAboutMe(AppAboutMe appAboutMe);
+
+    AppUser fetchCurrentUser(HttpServletRequest request);
+
 }

@@ -1,5 +1,6 @@
 package ar.com.saile.demojwt.integration;
 
+import ar.com.saile.demojwt.domain.AppAboutMe;
 import ar.com.saile.demojwt.domain.AppUser;
 import ar.com.saile.demojwt.repository.UserRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -52,12 +53,16 @@ public class TestUserIT {
                 faker.name().lastName()
         );
 
-        AppUser student = new AppUser( 1L,
+        AppUser student = new AppUser(1L,
                 name,
-        "String email",
-        "String username",
-        "String password",
-         new ArrayList<>());
+                "String email",
+                "String username",
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new AppAboutMe("", "", "", ""));
 
         // when
         ResultActions resultActions = mockMvc
@@ -83,12 +88,16 @@ public class TestUserIT {
         String email = String.format("%s@amigoscode.edu",
                 StringUtils.trimAllWhitespace(name.trim().toLowerCase()));
 
-        AppUser student = new AppUser( 1L,
-                name,
+        AppUser student = new AppUser(1L,
                 email,
                 "String username",
                 "String password",
-                new ArrayList<>());
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new ArrayList<>(),
+                new AppAboutMe());
 
         mockMvc.perform(post(API_V_1 + "students")
                         .contentType(MediaType.APPLICATION_JSON)

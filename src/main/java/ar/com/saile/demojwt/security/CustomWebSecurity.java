@@ -21,17 +21,19 @@ public class CustomWebSecurity extends WebSecurityConfigurerAdapter {
     static final String API_V_1 = "/api/v1/";
 
     private final UserDetailsService userDetailsService;
+
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
-        customAuthenticationFilter.setFilterProcessesUrl(API_V_1 + "login");
+        customAuthenticationFilter.setFilterProcessesUrl(API_V_1 + "user/login");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers(API_V_1 + "login").permitAll();
-        http.authorizeRequests().antMatchers(API_V_1 + "user").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, API_V_1 +"users/**").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.POST, API_V_1 +"role/**").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(API_V_1 + "user/login").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, API_V_1 + "user/**").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, API_V_1 + "role/**").hasRole("ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthenticationFilter);
         http.addFilter(new CustomAuthorizationFilter(authenticationManager()));
@@ -46,6 +48,7 @@ public class CustomWebSecurity extends WebSecurityConfigurerAdapter {
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
+
         return super.authenticationManagerBean();
     }
 }

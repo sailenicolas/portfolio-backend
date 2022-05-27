@@ -16,9 +16,10 @@ import java.util.Objects;
 public class AppRole implements Serializable {
 
     private final static String ID_COLUMN = "id";
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = ID_COLUMN, nullable = false)
+    @Column(name = ID_COLUMN)
     private Long id;
 
     private String name;

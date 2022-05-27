@@ -1,5 +1,7 @@
 package ar.com.saile.demojwt.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +17,11 @@ import java.util.Objects;
 @Transactional(rollbackFor = Exception.class)
 @AllArgsConstructor
 public class AppProject implements Serializable {
+
     private final static String ID_COLUMN = "id";
 
-
     public AppProject(String titulo, String imagen, String descripcion) {
+
         this.titulo = titulo;
         this.imagen = imagen;
         this.descripcion = descripcion;
@@ -34,6 +37,7 @@ public class AppProject implements Serializable {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(getId());
     }
 
@@ -41,7 +45,19 @@ public class AppProject implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = ID_COLUMN, nullable = false)
     private Long id;
+
+    @Column(nullable = false)
+    @NotNull
     private String titulo;
+
     private String imagen;
+
+    @Column(nullable = false)
+    @NotNull
     private String descripcion;
+
+    @ManyToOne()
+    @JsonBackReference
+    private AppUser userApp;
+
 }

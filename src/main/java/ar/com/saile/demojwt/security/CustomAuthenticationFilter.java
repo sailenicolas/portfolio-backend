@@ -1,7 +1,6 @@
 package ar.com.saile.demojwt.security;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
+import ar.com.saile.demojwt.service.SecurityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -9,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -17,20 +15,20 @@ import javax.servlet.FilterChain;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 
 @RequiredArgsConstructor
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
+
     public AuthenticationManager authenticationManager;
 
     public CustomAuthenticationFilter(AuthenticationManager authenticationManagerBean) {
-            this.authenticationManager = authenticationManagerBean;
+
+        this.authenticationManager = authenticationManagerBean;
     }
 
 
@@ -47,45 +45,31 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+
         response.setContentType(APPLICATION_JSON_VALUE);
         try {
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             Map<String, String> failedResponse = new HashMap<>();
-            failedResponse.put("error", failed.getLocalizedMessage());
+            failedResponse.put("errorMessage", failed.getLocalizedMessage());
+            failedResponse.put("errorCode", String.valueOf(HttpStatus.UNAUTHORIZED.value()));
             new ObjectMapper().writeValue(response.getOutputStream(), failedResponse);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }
     }
-    private static final String SECRET = "secret";
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException {
 
         User user = (User) authResult.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC512(SECRET.getBytes());
-        Date date = new Date(System.currentTimeMillis() + 10 * 60 * 1000);
-        String access_token = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(date)
-                .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
-                .sign(algorithm);
-        String refresh_token = JWT.create()
-                .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
-                .withIssuer(request.getRequestURL().toString())
-                .sign(algorithm);
+        String issuer = request.getRequestURL().toString();
+        String access_token = SecurityService.createToken(user, issuer);
+        String refresh_token = SecurityService.createRefreshToken(user, issuer);
         Map<String, String> tokens = new HashMap<>();
         tokens.put("access_token", access_token);
         tokens.put("refresh_token", refresh_token);
-        tokens.put("expires_at", String.valueOf(date.toInstant()));
         response.setContentType(APPLICATION_JSON_VALUE);
         new ObjectMapper().writeValue(response.getOutputStream(), tokens);
-        /*
-        response.setHeader("access_token", access_token);
-        response.setHeader("refresh_token", refresh_token);
-        */
     }
 
 }

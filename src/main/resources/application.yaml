@@ -1,0 +1,29 @@
+spring:
+  profiles:
+    active: dev
+---
+debug: false
+spring:
+  config:
+    activate:
+      on-profile: dev
+    name: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/demojwt?createDatabaseIfNotExist=true
+    username: saile
+    password: Password1$a
+  jpa:
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL8Dialect
+          format_sql: true
+      show-sql: false
+      open-in-view: true
+      hibernate:
+        ddl-auto: create
+app:
+  secret: "${PREFERABLE_KEY_SIZE}"
+logging:
+  level:
+    sql: info
+    web: info
