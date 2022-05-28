@@ -105,9 +105,9 @@ public class UserController {
     }
 
     @GetMapping("/experience/{id}")
-    public void viewExperience(@PathVariable Long id) {
+    public AppExperience viewExperience(@PathVariable Long id) {
 
-        experienceService.findById(id);
+        return experienceService.findById(id).orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
 
     }
 
@@ -120,13 +120,13 @@ public class UserController {
     @GetMapping("/softskills/{id}")
     public AppSoftSkill viewSoftSkills(@PathVariable Long id) {
 
-        return softSkillService.findById(id).get();
+        return softSkillService.findById(id).orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
     }
 
     @GetMapping("/projects/{id}")
     public AppProject viewProjects(@PathVariable Long id) {
 
-        return projectService.findById(id).get();
+        return projectService.findById(id).orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
     }
 
     @GetMapping("/about")
