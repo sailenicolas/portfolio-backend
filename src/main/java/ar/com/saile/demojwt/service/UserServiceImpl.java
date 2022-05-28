@@ -45,12 +45,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final AboutMeService aboutMeService;
 
 
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public AppUser saveUser(AppUser appUser) {
 
-        appUser.setPassword(bCryptPasswordEncoder
+        appUser.setPassword(passwordEncoder
                 .encode(appUser.getPassword()));
         userRepository.save(appUser);
         return null;
@@ -161,8 +161,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public AppUser fetchCurrentUser(HttpServletRequest request) {
 
         UsernamePasswordAuthenticationToken userPrincipal = (UsernamePasswordAuthenticationToken) request.getUserPrincipal();
-        AppUser details = (AppUser) userPrincipal.getDetails();
-        return details;
+        System.out.println("userPrincipal = " + userPrincipal.getPrincipal());
+        AppUser appUser = (AppUser) userPrincipal.getDetails();
+        return this.findByUsername(appUser.getUsername());
     }
-
 }
