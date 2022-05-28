@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 @SpringBootApplication
 public class DemojwtApplication {
@@ -39,10 +39,10 @@ public class DemojwtApplication {
             AppSoftSkill appSoftSkill1 = new AppSoftSkill(10L, "Mas alla", "Me gusta la mermelada");
             AppProject appProject = new AppProject("Algo, aqui", "Me gusta el dulce de leche", "");
             AppProject appProject1 = new AppProject("Mas alla", "Me gusta la mermelada", "Lorem Ipsum");
-            AppEducation appEducation = new AppEducation("institucion", "titulo", "imagen", "Ingenieria algo", 0, new Date(), new Date());
-            AppEducation appEducation1 = new AppEducation("institucion 1", "titulo 2", "imagen", "Ingenieria algo 2", 0, new Date(), new Date());
-            AppExperience appExperience = new AppExperience("cargo", "empresa", TipoDeEmpleo.AUTONOMO, "imagen", new Date(), "fin", "ubicacion");
-            AppExperience appExperience1 = new AppExperience("cargo1", "empresa 2", TipoDeEmpleo.FORMACION, "imagen", new Date(), "fin", "ubicacion 2");
+            AppEducation appEducation = new AppEducation("institucion", "titulo", "imagen", "Ingenieria algo", 0, LocalDate.of(2010, 2, 1), LocalDate.of(2012, 2, 15));
+            AppEducation appEducation1 = new AppEducation("institucion 1", "titulo 2", "imagen", "Ingenieria algo 2", 0, LocalDate.of(2010, 2, 1), LocalDate.of(2012, 2, 15));
+            AppExperience appExperience = new AppExperience("cargo", "empresa", TipoDeEmpleo.AUTONOMO, "imagen", LocalDate.of(2020, 2, 13), LocalDate.of(2021, 2, 27), "ubicacion");
+            AppExperience appExperience1 = new AppExperience("cargo1", "empresa 2", TipoDeEmpleo.FORMACION, "imagen", LocalDate.of(2019, 2, 4), LocalDate.of(2013, 1, 20), "ubicacion 2");
             userService.saveRole(role_user);
             userService.saveRole(role_manager);
             userService.saveRole(role_admin);
@@ -65,14 +65,14 @@ public class DemojwtApplication {
             ArrayList<AppExperience> experiences = new ArrayList<>();
             ArrayList<AppProject> projects = new ArrayList<>();
 
-            AppAboutMe appAboutMe = new AppAboutMe("assets/images/128.png", "default", "default", "aaaaa");
-            AppAboutMe appAboutMe1 = new AppAboutMe("assets/images/128.png", "default", "default", "aaaaa");
-            AppAboutMe appAboutMe2 = new AppAboutMe("assets/images/128.png", "default", "default", "aaaaa");
-            AppAboutMe appAboutMe3 = new AppAboutMe("assets/images/128.png", "default", "default", "aaaaa");
-            AppUser appUser = new AppUser(1L, "email3@saile.com", "john", "1234", roles, softSkills, educations, experiences, projects, appAboutMe);
-            AppUser appUser1 = new AppUser(null, "email@saile.com", "will", "1234", roles, softSkills, educations, experiences, projects, appAboutMe1);
-            AppUser appUser2 = new AppUser(null, "email2@saile.com", "jim", "1234", roles, softSkills, educations, experiences, projects, appAboutMe2);
-            AppUser appUser3 = new AppUser(null, "email1@saile.com", "arnold", "1234", roles, softSkills, educations, experiences, projects, appAboutMe3);
+            AppAboutMe appAboutMe = new AppAboutMe("assets/images/128.png", "default", "default", "aaaaa", "argentina", "mail1@saile.com.ar");
+            AppAboutMe appAboutMe1 = new AppAboutMe("assets/images/128.png", "default", "default", "aaaaa", "argentina", "mail2@saile.com.ar");
+            AppAboutMe appAboutMe2 = new AppAboutMe("assets/images/128.png", "default", "default", "aaaaa", "argentina", "mail3@saile.com.ar");
+            AppAboutMe appAboutMe3 = new AppAboutMe("assets/images/128.png", "default", "default", "aaaaa", "argentina", "mail4@saile.com.ar");
+            AppUser appUser = new AppUser(1L, "john", "1234", roles, softSkills, educations, experiences, projects, appAboutMe);
+            AppUser appUser1 = new AppUser(null, "will", "1234", roles, softSkills, educations, experiences, projects, appAboutMe1);
+            AppUser appUser2 = new AppUser(null, "jim", "1234", roles, softSkills, educations, experiences, projects, appAboutMe2);
+            AppUser appUser3 = new AppUser(null, "arnold", "1234", roles, softSkills, educations, experiences, projects, appAboutMe3);
             appAboutMe.setAppUser(appUser);
             appAboutMe1.setAppUser(appUser1);
             appAboutMe2.setAppUser(appUser2);

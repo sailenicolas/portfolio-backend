@@ -2,6 +2,7 @@ package ar.com.saile.demojwt.domain;
 
 import ar.com.saile.demojwt.enums.TipoDeEmpleo;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.sun.istack.NotNull;
 import lombok.*;
 import org.springframework.lang.Nullable;
@@ -10,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.*;
 import javax.validation.constraints.PastOrPresent;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -38,6 +39,8 @@ public class AppExperience implements Serializable {
 
     @NotNull
     @Column(nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.NUMBER)
+    @Enumerated(EnumType.ORDINAL)
     TipoDeEmpleo tipoDeEmpleo;
 
     @Nullable
@@ -46,11 +49,13 @@ public class AppExperience implements Serializable {
     @NotNull
     @Column(nullable = false)
     @PastOrPresent
-    private Date inicio;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private LocalDate inicio;
 
     @Nullable
     @PastOrPresent
-    private String fin;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
+    private LocalDate fin;
 
     @Nullable
     private String ubicacion;
@@ -59,7 +64,7 @@ public class AppExperience implements Serializable {
     @JsonBackReference
     private AppUser userApp;
 
-    public AppExperience(String cargo, String empresa, TipoDeEmpleo tipoDeEmpleo, String imagen, Date inicio, String fin, String ubicacion) {
+    public AppExperience(String cargo, String empresa, TipoDeEmpleo tipoDeEmpleo, String imagen, @PastOrPresent LocalDate inicio, @PastOrPresent LocalDate fin, String ubicacion) {
 
         this.cargo = cargo;
         this.empresa = empresa;

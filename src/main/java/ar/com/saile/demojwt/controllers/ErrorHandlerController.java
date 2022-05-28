@@ -1,5 +1,6 @@
 package ar.com.saile.demojwt.controllers;
 
+import ar.com.saile.demojwt.exceptions.BindingResultException;
 import ar.com.saile.demojwt.exceptions.ErrorResponse;
 import ar.com.saile.demojwt.exceptions.MissingHeaderInfoException;
 import ar.com.saile.demojwt.exceptions.RecordNotFoundException;
@@ -12,58 +13,81 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.*;
 
 @RestControllerAdvice
 public class ErrorHandlerController extends ResponseEntityExceptionHandler {
-
-    private String INCORRECT_REQUEST = "INCORRECT_REQUEST";
-
-    private String BAD_REQUEST = "BAD_REQUEST";
-
-    private String NO_AUTH = "NO_AUTH";
 
     @ExceptionHandler(RecordNotFoundException.class)
     public final ResponseEntity<ErrorResponse> handleUserNotFoundException
             (RecordNotFoundException ex, WebRequest request) {
 
-        Map<String, String> details = new HashMap<>();
-        details.put("errorMessage", ex.getLocalizedMessage());
-        ErrorResponse error = new ErrorResponse(INCORRECT_REQUEST, details);
+        return errorResponseResponseEntity(NOT_FOUND.getReasonPhrase(), ex, NOT_FOUND.ordinal(), NOT_FOUND);
+    }
 
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    @ExceptionHandler(IllegalArgumentException.class)
+    protected ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
+
+        return errorResponseResponseEntity(BAD_REQUEST.getReasonPhrase(), ex, BAD_REQUEST.value(), BAD_REQUEST);
+    }
+
+    @ExceptionHandler(BindingResultException.class)
+    protected ResponseEntity<ErrorResponse> handleBindingResultException(BindingResultException ex, WebRequest request) {
+
+        Map<String, Object> tokens = new HashMap<>();
+        Map<String, Object> tokens2 = new HashMap<>();
+        var token2 = ex.getFieldErrors().stream().map(vale -> {
+            tokens2.put("message", vale.getDefaultMessage());
+            tokens2.put("code", vale.getCode());
+            tokens2.put("field", vale.getField());
+            tokens2.put("extra", vale.getObjectName());
+            return tokens2;
+        }).collect(Collectors.toList());
+
+        tokens.put("errorMessage", token2);
+        tokens.put("errorCode", BAD_REQUEST);
+        ErrorResponse error = new ErrorResponse(BAD_REQUEST.getReasonPhrase(), tokens);
+        return new ResponseEntity<>(error, BAD_REQUEST);
     }
 
     @ExceptionHandler(JWTVerificationException.class)
     public final ResponseEntity<ErrorResponse> handleJWTVerificationException(JWTVerificationException ex, WebRequest webRequest) {
 
-        Map<String, String> tokens = new HashMap<>();
-        tokens.put("errorMessage", ex.getMessage());
-        tokens.put("errorCode", String.valueOf(FORBIDDEN.value()));
-        ErrorResponse error = new ErrorResponse(NO_AUTH, tokens);
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+        return errorResponseResponseEntity(UNAUTHORIZED.getReasonPhrase(), ex, UNAUTHORIZED.ordinal(), UNAUTHORIZED);
     }
 
     @ExceptionHandler(JWTDecodeException.class)
     public final ResponseEntity<ErrorResponse> handleJWTDecodeException(JWTDecodeException ex, WebRequest webRequest) {
 
-        Map<String, String> tokens = new HashMap<>();
-        tokens.put("errorMessage", ex.getMessage());
-        tokens.put("errorCode", String.valueOf(FORBIDDEN.value()));
-        ErrorResponse error = new ErrorResponse(NO_AUTH, tokens);
-        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+        return errorResponseResponseEntity(FORBIDDEN.getReasonPhrase(), ex, FORBIDDEN.ordinal(), FORBIDDEN);
+    }
+
+    protected ResponseEntity<ErrorResponse> errorResponseResponseEntity(String cause, Exception ex, Integer code, HttpStatus status) {
+
+        Map<String, Object> tokens = new HashMap<>();
+        tokens.put("errorMessage", ex.getLocalizedMessage());
+        tokens.put("errorCode", code);
+        ErrorResponse error = new ErrorResponse(cause, tokens);
+        return new ResponseEntity<>(error, status);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public void constraintViolationException(HttpServletResponse response) throws IOException {
+
+        response.sendError(HttpStatus.BAD_REQUEST.value());
     }
 
     @ExceptionHandler(MissingHeaderInfoException.class)
     public final ResponseEntity<ErrorResponse> handleInvalidTraceIdException
             (MissingHeaderInfoException ex, WebRequest request) {
 
-        Map<String, String> details = new HashMap<>();
-        details.put("errorMessage", ex.getLocalizedMessage());
-        ErrorResponse error = new ErrorResponse(BAD_REQUEST, details);
-        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        return errorResponseResponseEntity(BAD_REQUEST.getReasonPhrase(), ex, BAD_REQUEST.value(), HttpStatus.BAD_REQUEST);
     }
 }

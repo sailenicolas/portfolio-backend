@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.io.Serializable;
 
 @Entity
@@ -26,19 +27,27 @@ public class AppAboutMe implements Serializable {
 
     private String header;
 
-    private String aboutMe;
+    private String sobremi;
 
-    private String name;
+    private String nombre;
+
+    private String ubicacion;
+
+    @Column(unique = true, nullable = false)
+    @Email(message = "Email no valido")
+    private String email;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private AppUser appUser;
 
-    public AppAboutMe(String imagen, String header, String aboutMe, String name) {
+    public AppAboutMe(String imagen, String header, String aboutMe, String name, String ubicacion, String email) {
 
         this.imagen = imagen;
         this.header = header;
-        this.aboutMe = aboutMe;
-        this.name = name;
+        this.sobremi = aboutMe;
+        this.nombre = name;
+        this.ubicacion = ubicacion;
+        this.email = email;
     }
 }

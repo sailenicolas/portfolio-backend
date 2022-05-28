@@ -1,14 +1,16 @@
 package ar.com.saile.demojwt.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.sun.istack.NotNull;
 import lombok.*;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @NoArgsConstructor
@@ -27,38 +29,37 @@ public class AppEducation implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-
+    @NotBlank(message = "No puede estar en blanco")
     private String institucion;
 
     @Column(nullable = false)
-
+    @NotBlank(message = "No puede estar en blanco")
     private String titulo;
 
-    @NotNull
-    @Column(nullable = false)
+    @Column()
     private String imagen;
 
-    @NotNull
+    @NotBlank(message = "No puede estar en blanco")
     @Column(nullable = false)
     private String carrera;
 
-    @NotNull
+    @NotNull(message = "No puede estar en blanco")
     @Column(nullable = false)
     private Integer puntaje;
 
     @Column(nullable = false)
-    @NotNull
+    @NotNull(message = "No puede estar en blanco")
     @Past
-    private Date inicio;
+    private LocalDate inicio;
 
-    private Date fin;
+    @Nullable
+    private LocalDate fin;
 
     @ManyToOne()
     @JsonBackReference
-    @NotNull
     private AppUser userApp;
 
-    public AppEducation(String institucion, String titulo, String imagen, String carrera, Integer puntaje, Date inicio, Date fin) {
+    public AppEducation(String institucion, String titulo, String imagen, String carrera, Integer puntaje, @Past LocalDate inicio, LocalDate fin) {
 
         this.institucion = institucion;
         this.titulo = titulo;

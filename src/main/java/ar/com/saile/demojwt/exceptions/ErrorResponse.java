@@ -7,7 +7,7 @@ import java.util.Map;
 @Data
 public class ErrorResponse {
 
-    public ErrorResponse(String message, Map<String, String> details) {
+    public ErrorResponse(String message, Map<String, Object> details) {
 
         super();
         this.message = message;
@@ -16,6 +16,6 @@ public class ErrorResponse {
 
     private String message;
 
-    private Map<String, String> details;
+    private Map<String, Object> details;
 
 }
