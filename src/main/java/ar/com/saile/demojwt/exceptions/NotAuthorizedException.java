@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.io.Serial;
 
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public class RecordNotFoundException extends RuntimeException {
+@ResponseStatus(HttpStatus.UNAUTHORIZED)
+public class NotAuthorizedException extends RuntimeException {
 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public RecordNotFoundException(String message) {
+    public NotAuthorizedException(String message) {
 
         super(message);
     }

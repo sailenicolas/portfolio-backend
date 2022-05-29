@@ -1,9 +1,6 @@
 package ar.com.saile.demojwt.controllers;
 
-import ar.com.saile.demojwt.exceptions.BindingResultException;
-import ar.com.saile.demojwt.exceptions.ErrorResponse;
-import ar.com.saile.demojwt.exceptions.MissingHeaderInfoException;
-import ar.com.saile.demojwt.exceptions.RecordNotFoundException;
+import ar.com.saile.demojwt.exceptions.*;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -229,8 +226,8 @@ public class ErrorHandlerController extends ResponseEntityExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleBindingResultException(BindingResultException ex, WebRequest request) {
 
         Map<String, Object> tokens = new HashMap<>();
-        Map<String, Object> tokens2 = new HashMap<>();
         var token2 = ex.getFieldErrors().stream().map(vale -> {
+            Map<String, Object> tokens2 = new HashMap<>();
             tokens2.put("message", vale.getDefaultMessage());
             tokens2.put("code", vale.getCode());
             tokens2.put("field", vale.getField());
@@ -242,6 +239,12 @@ public class ErrorHandlerController extends ResponseEntityExceptionHandler {
         tokens.put("errorCode", BAD_REQUEST);
         ErrorResponse error = new ErrorResponse(BAD_REQUEST.getReasonPhrase(), tokens);
         return new ResponseEntity<>(error, BAD_REQUEST);
+    }
+
+    @ExceptionHandler(NotAuthorizedException.class)
+    public final ResponseEntity<ErrorResponse> handleNotAuthorizedException(NotAuthorizedException ex, WebRequest webRequest) {
+
+        return errorResponseResponseEntity(UNAUTHORIZED.getReasonPhrase(), ex, UNAUTHORIZED.value(), UNAUTHORIZED);
     }
 
     @ExceptionHandler(JWTVerificationException.class)

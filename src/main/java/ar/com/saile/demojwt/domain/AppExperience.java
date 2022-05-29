@@ -12,6 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.PastOrPresent;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
@@ -36,6 +37,35 @@ public class AppExperience implements Serializable {
     @Column(nullable = false)
     @NotNull
     private String empresa;
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof AppExperience that)) return false;
+        return getId().equals(that.getId());
+    }
+
+    @Override
+    public String toString() {
+
+        return "AppExperience{" +
+                "id=" + id +
+                ", cargo='" + cargo + '\'' +
+                ", empresa='" + empresa + '\'' +
+                ", tipoDeEmpleo=" + tipoDeEmpleo +
+                ", imagen='" + imagen + '\'' +
+                ", inicio=" + inicio +
+                ", fin=" + fin +
+                ", ubicacion='" + ubicacion + '\'' +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId());
+    }
 
     @NotNull
     @Column(nullable = false)

@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
@@ -26,6 +27,31 @@ public class AppSoftSkill implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = ID_COLUMN, nullable = false)
     private Long id;
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof AppSoftSkill that)) return false;
+        return getId().equals(that.getId());
+    }
+
+    @Override
+    public String toString() {
+
+        return "AppSoftSkill{" +
+                "id=" + id +
+                ", val=" + val +
+                ", titulo='" + titulo + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId());
+    }
 
     public AppSoftSkill(Long val, String titulo, String descripcion) {
 
@@ -51,13 +77,4 @@ public class AppSoftSkill implements Serializable {
     @JsonBackReference
     private AppUser userApp;
 
-    @Override
-    public String toString() {
-
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "val = " + val + ", " +
-                "titulo = " + titulo + ", " +
-                "descripcion = " + descripcion + ")";
-    }
 }

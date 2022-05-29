@@ -2,6 +2,7 @@ package ar.com.saile.demojwt.controllers;
 
 import ar.com.saile.demojwt.domain.*;
 import ar.com.saile.demojwt.exceptions.BindingResultException;
+import ar.com.saile.demojwt.exceptions.NotAuthorizedException;
 import ar.com.saile.demojwt.exceptions.RecordNotFoundException;
 import ar.com.saile.demojwt.service.*;
 import lombok.Data;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 
 @RestController
@@ -47,7 +49,7 @@ public class UserController {
     @Transactional
     public Object getAppUser(HttpServletRequest request) {
 
-        AppUser appUser = userService.fetchCurrentUser(request);
+        AppUser appUser = userService.fetchAuthenticatedUserFromRequest(request);
         Optional<AppUser> appUserUs = userService.findByUsername(appUser);
         return appUserUs.orElse(null);
     }
@@ -78,36 +80,82 @@ public class UserController {
     }
 
     @PutMapping("/experience/{id}")
-    public void editExperience(@PathVariable Integer id) {
-
-        System.out.println("id = " + id);
-    }
-
-    @PutMapping("/education/{id}")
-    public void editEducation(@PathVariable Long id, @Valid @RequestBody final AppEducation appEducation, BindingResult bindingResult) {
+    public AppExperience editExperience(@PathVariable Long id, @Valid @RequestBody final AppExperience appExperience, BindingResult bindingResult, HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
             throw new BindingResultException(bindingResult);
         }
-        System.out.println("bindingResult = " + bindingResult);
-        System.out.println("appEducation = " + appEducation);
-        System.out.println("id = " + id);
+        appExperience.setId(id);
+        AppUser appUser = userService.fetchAuthenticatedUserFromRequest(request);
+        if (!appUser.getExperiences().contains(appExperience)) {
+            throw new NotAuthorizedException("NOT_AUTHORIZED");
+        }
+        appExperience.setUserApp(appUser);
+        return experienceService.saveExperience(appExperience);
+
+    }
+
+    @PutMapping("/education/{id}")
+    public AppEducation editEducation(@PathVariable Long id, @Valid @RequestBody final AppEducation appEducation, BindingResult bindingResult, HttpServletRequest request) {
+
+        if (bindingResult.hasErrors()) {
+            throw new BindingResultException(bindingResult);
+        }
+        appEducation.setId(id);
+        AppUser appUser = userService.fetchAuthenticatedUserFromRequest(request);
+        if (!appUser.getEducations().contains(appEducation)) {
+            throw new NotAuthorizedException("NOT_AUTHORIZED");
+        }
+        appEducation.setUserApp(appUser);
+        return educationService.saveEducation(appEducation);
+
     }
 
     @PutMapping("/softskills/{id}")
-    public void editSoftSkills(@PathVariable Integer id) {
+    public AppSoftSkill editSoftSkills(@PathVariable Long id, @Valid @RequestBody final AppSoftSkill appSoftSkill, BindingResult bindingResult, HttpServletRequest request) {
 
-        System.out.println("id = " + id);
+        if (bindingResult.hasErrors()) {
+            throw new BindingResultException(bindingResult);
+        }
+        appSoftSkill.setId(id);
+        AppUser appUser = userService.fetchAuthenticatedUserFromRequest(request);
+        if (!appUser.getSoftSkills().contains(appSoftSkill)) {
+            throw new NotAuthorizedException("NOT_AUTHORIZED");
+        }
+        appSoftSkill.setUserApp(appUser);
+        return softSkillService.saveSoftSkills(appSoftSkill);
     }
 
     @PutMapping("/projects/{id}")
-    public AppProject editProjects(@PathVariable Long id, @RequestBody AppProject appProject) {
+    public AppProject editProjects(@PathVariable Long id, @Valid @RequestBody AppProject appProject, BindingResult bindingResult, HttpServletRequest request) {
 
-        return projectService.findById(id).orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
+        if (bindingResult.hasErrors()) {
+            throw new BindingResultException(bindingResult);
+        }
+        appProject.setId(id);
+        AppUser appUser = userService.fetchAuthenticatedUserFromRequest(request);
+        if (!appUser.getProjects().contains(appProject)) {
+            throw new NotAuthorizedException("NOT_AUTHORIZED");
+        }
+        appProject.setUserApp(appUser);
+        return projectService.saveProject(appProject);
     }
 
-    @PutMapping("/aboutMe")
-    public void editAboutMe() {
+    @PutMapping("/aboutMe/{id}")
+    public AppAboutMe editAboutMe(@PathVariable Long id, @Valid @RequestBody AppAboutMe appAboutMe, BindingResult bindingResult, HttpServletRequest request) {
+
+        if (bindingResult.hasErrors()) {
+            throw new BindingResultException(bindingResult);
+        }
+        appAboutMe.setId(id);
+        AppUser appUser = userService.fetchAuthenticatedUserFromRequest(request);
+        AppAboutMe aboutMe = appUser.getAboutMe();
+        if (!(Objects.equals(aboutMe.getId(), appAboutMe.getId()))) {
+            throw new NotAuthorizedException("NOT_AUTHORIZED");
+        }
+        appAboutMe.setAppUser(appUser);
+        appUser.setAboutMe(appAboutMe);
+        return userService.saveUser(appUser).getAboutMe();
 
 
     }
@@ -140,7 +188,7 @@ public class UserController {
     @GetMapping("/aboutMe")
     public Optional<AppAboutMe> viewAboutMe(HttpServletRequest request) {
 
-        AppUser details = userService.fetchCurrentUser(request);
+        AppUser details = userService.fetchAuthenticatedUserFromRequest(request);
         return aboutMeService.findById(details.getId());
     }
 

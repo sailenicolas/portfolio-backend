@@ -55,37 +55,33 @@ public class AppUser implements Serializable {
     private AppAboutMe aboutMe;
 
     @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof AppUser)) return false;
+        AppUser appUser = (AppUser) o;
+        return getId().equals(appUser.getId()) && getUsername().equals(appUser.getUsername());
+    }
+
+    @Override
     public String toString() {
 
         return "AppUser{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='[PROTECTED]" + '\'' +
-                ", roleCollection=" + roleCollection +
-                ", softSkills=" + softSkills +
-                ", educations=" + educations +
-                ", experiences=" + experiences +
-                ", projects=" + projects +
                 '}';
-    }
-
-    public AppUser(String username) {
-
-        this.username = username;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) return true;
-        if (!(o instanceof AppUser appUser)) return false;
-        return getId().equals(appUser.getId()) && getUsername().equals(appUser.getUsername());
     }
 
     @Override
     public int hashCode() {
 
         return Objects.hash(getId(), getUsername());
+    }
+
+    public AppUser(String username) {
+
+        this.username = username;
     }
 
 }

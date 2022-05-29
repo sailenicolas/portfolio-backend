@@ -52,8 +52,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         appUser.setPassword(passwordEncoder
                 .encode(appUser.getPassword()));
-        userRepository.save(appUser);
-        return null;
+        return userRepository.save(appUser);
     }
 
     @Override
@@ -158,10 +157,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public AppUser fetchCurrentUser(HttpServletRequest request) {
+    public AppUser fetchAuthenticatedUserFromRequest(HttpServletRequest request) {
 
         UsernamePasswordAuthenticationToken userPrincipal = (UsernamePasswordAuthenticationToken) request.getUserPrincipal();
-        System.out.println("userPrincipal = " + userPrincipal.getPrincipal());
         AppUser appUser = (AppUser) userPrincipal.getDetails();
         return this.findByUsername(appUser.getUsername());
     }

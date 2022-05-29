@@ -9,7 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
@@ -29,12 +33,16 @@ public class AppAboutMe implements Serializable {
 
     private String sobremi;
 
+    @NotNull
+    @NotBlank
     private String nombre;
 
     private String ubicacion;
 
     @Column(unique = true, nullable = false)
     @Email(message = "Email no valido")
+    @NotNull
+    @NotEmpty
     private String email;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -49,5 +57,33 @@ public class AppAboutMe implements Serializable {
         this.nombre = name;
         this.ubicacion = ubicacion;
         this.email = email;
+    }
+
+    @Override
+    public String toString() {
+
+        return "AppAboutMe{" +
+                "id=" + id +
+                ", imagen='" + imagen + '\'' +
+                ", header='" + header + '\'' +
+                ", sobremi='" + sobremi + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof AppAboutMe that)) return false;
+        return getId().equals(that.getId()) && getEmail().equals(that.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId(), getEmail(), getAppUser());
     }
 }
