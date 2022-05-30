@@ -3,6 +3,7 @@ package ar.com.saile.demojwt.controllers;
 import ar.com.saile.demojwt.exceptions.*;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.http.HttpHeaders;
@@ -245,6 +246,12 @@ public class ErrorHandlerController extends ResponseEntityExceptionHandler {
     public final ResponseEntity<ErrorResponse> handleNotAuthorizedException(NotAuthorizedException ex, WebRequest webRequest) {
 
         return errorResponseResponseEntity(UNAUTHORIZED.getReasonPhrase(), ex, UNAUTHORIZED.value(), UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public final ResponseEntity<ErrorResponse> handleTokenExpiredException(TokenExpiredException ex, WebRequest webRequest) {
+
+        return errorResponseResponseEntity("Token_NOAUTH", ex, UNAUTHORIZED.value(), UNAUTHORIZED);
     }
 
     @ExceptionHandler(JWTVerificationException.class)

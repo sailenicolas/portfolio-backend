@@ -9,4 +9,7 @@ public interface SoftSkillService {
     AppSoftSkill saveSoftSkills(AppSoftSkill appSoftSkill);
 
     Optional<AppSoftSkill> findById(Long id);
+
+    Boolean deleteById(Long id);
+
 }

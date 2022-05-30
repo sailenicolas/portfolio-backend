@@ -9,6 +9,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.PastOrPresent;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -32,10 +33,12 @@ public class AppExperience implements Serializable {
 
     @NotNull
     @Column(nullable = false)
+    @NotBlank
     private String cargo;
 
     @Column(nullable = false)
     @NotNull
+    @NotBlank
     private String empresa;
 
     @Override

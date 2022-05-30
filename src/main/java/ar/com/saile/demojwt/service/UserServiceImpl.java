@@ -149,7 +149,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         Optional<AppUser> user = userRepository.findByUsername(username);
         if (user.isEmpty()) {
-            throw new UsernameNotFoundException("username not found");
+            throw new UsernameNotFoundException("Username not found");
         }
         Collection<SimpleGrantedAuthority> roles = new ArrayList<>();
         user.get().getRoleCollection().forEach(appRole -> roles.add(new SimpleGrantedAuthority(appRole.getName())));

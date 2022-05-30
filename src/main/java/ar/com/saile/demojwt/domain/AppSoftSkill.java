@@ -9,6 +9,9 @@ import lombok.Setter;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -62,15 +65,18 @@ public class AppSoftSkill implements Serializable {
 
     @NotNull
     @Column(nullable = false)
-
+    @Min(0)
+    @Max(100)
     private Long val;
 
     @Column(nullable = false)
     @NotNull
+    @NotBlank
     private String titulo;
 
     @Column(nullable = false)
     @NotNull
+    @NotBlank
     private String descripcion;
 
     @ManyToOne(fetch = FetchType.LAZY)

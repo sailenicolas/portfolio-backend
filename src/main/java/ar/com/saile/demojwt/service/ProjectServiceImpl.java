@@ -28,4 +28,10 @@ public class ProjectServiceImpl implements ProjectService {
 
         return projectRepository.findById(id);
     }
+
+    @Override
+    public Boolean deleteById(Long id) {
+
+        return null;
+    }
 }

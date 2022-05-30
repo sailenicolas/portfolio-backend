@@ -9,4 +9,7 @@ public interface ProjectService {
     AppProject saveProject(AppProject appProject);
 
     Optional<AppProject> findById(Long id);
+
+    Boolean deleteById(Long id);
+
 }

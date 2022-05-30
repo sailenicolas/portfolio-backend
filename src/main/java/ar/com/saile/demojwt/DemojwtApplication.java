@@ -37,7 +37,7 @@ public class DemojwtApplication {
             AppRole role_super_admin = new AppRole(null, "ROLE_SUPER_ADMIN");
             AppSoftSkill appSoftSkill = new AppSoftSkill(25L, "Algo, aqui", "Me gusta el dulce de leche");
             AppSoftSkill appSoftSkill1 = new AppSoftSkill(10L, "Mas alla", "Me gusta la mermelada");
-            AppProject appProject = new AppProject("Algo, aqui", "Me gusta el dulce de leche", "");
+            AppProject appProject = new AppProject("Algo, aqui", "Me gusta el dulce de leche", "algo, largo aca");
             AppProject appProject1 = new AppProject("Mas alla", "Me gusta la mermelada", "Lorem Ipsum");
             AppEducation appEducation = new AppEducation("institucion", "titulo", "imagen", "Ingenieria algo", 0, LocalDate.of(2010, 2, 1), LocalDate.of(2012, 2, 15));
             AppEducation appEducation1 = new AppEducation("institucion 1", "titulo 2", "imagen", "Ingenieria algo 2", 0, LocalDate.of(2010, 2, 1), LocalDate.of(2012, 2, 15));
@@ -83,12 +83,13 @@ public class DemojwtApplication {
             userService.saveUser(appUser2);
             userService.saveUser(appUser3);
 
+            userService.addRoleToUser("john", "ROLE_SUPER_ADMIN");
+            userService.addRoleToUser("john", "ROLE_ADMIN");
             userService.addRoleToUser("john", "ROLE_USER");
+
+            
             userService.addRoleToUser("will", "ROLE_MANAGER");
             userService.addRoleToUser("jim", "ROLE_ADMIN");
-            userService.addRoleToUser("arnold", "ROLE_SUPER_ADMIN");
-            userService.addRoleToUser("arnold", "ROLE_ADMIN");
-            userService.addRoleToUser("arnold", "ROLE_USER");
             userService.addSoftSkillsToUser("john", appSoftSkill);
             userService.addSoftSkillsToUser("john", appSoftSkill1);
             userService.addProjectsToUser("john", appProject);

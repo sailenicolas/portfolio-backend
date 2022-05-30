@@ -9,9 +9,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -80,6 +78,8 @@ public class AppEducation implements Serializable {
 
     @NotNull(message = "No puede estar en blanco")
     @Column(nullable = false)
+    @Min(0)
+    @Max(100)
     private Integer puntaje;
 
     @Column(nullable = false)
@@ -88,6 +88,7 @@ public class AppEducation implements Serializable {
     private LocalDate inicio;
 
     @Nullable
+    @PastOrPresent
     private LocalDate fin;
 
     @ManyToOne()

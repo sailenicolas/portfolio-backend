@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Proxy;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonIgnoreProperties({"roleCollection", "password",})
+@Proxy(lazy = false)
 public class AppUser implements Serializable {
 
     private final static String ID_COLUMN = "id";

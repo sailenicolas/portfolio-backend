@@ -3,9 +3,11 @@ package ar.com.saile.demojwt.domain;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -59,12 +61,15 @@ public class AppProject implements Serializable {
 
     @Column(nullable = false)
     @NotNull
+    @NotBlank
     private String titulo;
 
+    @Nullable
     private String imagen;
 
     @Column(nullable = false)
     @NotNull
+    @NotBlank
     private String descripcion;
 
     @ManyToOne()
