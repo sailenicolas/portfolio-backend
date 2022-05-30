@@ -236,7 +236,8 @@ public class ErrorHandlerController extends ResponseEntityExceptionHandler {
             return tokens2;
         }).collect(Collectors.toList());
 
-        tokens.put("errorMessage", token2);
+        tokens.put("errorMessage", "Hay errores en lo enviado");
+        tokens.put("errorFields", token2);
         tokens.put("errorCode", BAD_REQUEST);
         ErrorResponse error = new ErrorResponse(BAD_REQUEST.getReasonPhrase(), tokens);
         return new ResponseEntity<>(error, BAD_REQUEST);
@@ -266,7 +267,7 @@ public class ErrorHandlerController extends ResponseEntityExceptionHandler {
         return errorResponseResponseEntity(FORBIDDEN.getReasonPhrase(), ex, FORBIDDEN.ordinal(), FORBIDDEN);
     }
 
-    protected ResponseEntity<ErrorResponse> errorResponseResponseEntity(String cause, Exception ex, Integer code, HttpStatus status) {
+    public ResponseEntity<ErrorResponse> errorResponseResponseEntity(String cause, Exception ex, Integer code, HttpStatus status) {
 
         Map<String, Object> tokens = new HashMap<>();
         tokens.put("errorMessage", ex.getLocalizedMessage());

@@ -1,5 +1,6 @@
 package ar.com.saile.demojwt.security;
 
+import ar.com.saile.demojwt.exceptions.ErrorResponse;
 import ar.com.saile.demojwt.service.SecurityService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -44,18 +45,15 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     }
 
     @Override
-    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
 
         response.setContentType(APPLICATION_JSON_VALUE);
-        try {
-            response.setStatus(HttpStatus.UNAUTHORIZED.value());
-            Map<String, String> failedResponse = new HashMap<>();
-            failedResponse.put("errorMessage", failed.getLocalizedMessage());
-            failedResponse.put("errorCode", String.valueOf(HttpStatus.UNAUTHORIZED.value()));
-            new ObjectMapper().writeValue(response.getOutputStream(), failedResponse);
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
+        Map<String, Object> tokens = new HashMap<>();
+        tokens.put("errorMessage", failed.getLocalizedMessage());
+        tokens.put("errorCode", String.valueOf(HttpStatus.UNAUTHORIZED.value()));
+        ErrorResponse error = new ErrorResponse("USUARIO ERRONEO", tokens);
+        new ObjectMapper().writeValue(response.getOutputStream(), error);
     }
 
     @Override

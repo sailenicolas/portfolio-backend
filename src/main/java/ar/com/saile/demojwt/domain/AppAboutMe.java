@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
@@ -27,10 +28,14 @@ public class AppAboutMe implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Nullable
     private String imagen;
 
+    @Nullable
     private String header;
 
+    @NotNull
+    @NotBlank
     private String sobremi;
 
     @NotNull

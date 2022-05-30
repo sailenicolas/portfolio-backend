@@ -31,7 +31,8 @@ public class EducationServiceImpl implements EducationService {
     @Override
     public Boolean deleteById(Long id) {
 
-        return null;
+        educationRepository.deleteById(id);
+        return educationRepository.existsById(id);
     }
 
 }

@@ -30,13 +30,14 @@ public class EducationController {
     private final UserService userService;
 
     @PostMapping("/")
-    
     public AppEducation createEducation(@Valid @RequestBody final AppEducation appEducation, BindingResult bindingResult, HttpServletRequest request) {
 
+        AppUser appUser = this.userService.fetchAuthenticatedUserFromRequest(request);
         if (bindingResult.hasErrors()) {
             throw new BindingResultException(bindingResult);
         }
-        return appEducation;
+        appEducation.setUserApp(appUser);
+        return educationService.saveEducation(appEducation);
     }
 
 

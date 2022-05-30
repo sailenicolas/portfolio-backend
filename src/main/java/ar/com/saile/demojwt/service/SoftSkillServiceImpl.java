@@ -34,6 +34,7 @@ public class SoftSkillServiceImpl implements SoftSkillService {
     @Override
     public Boolean deleteById(Long id) {
 
-        return null;
+        softSkillRepository.deleteById(id);
+        return softSkillRepository.existsById(id);
     }
 }

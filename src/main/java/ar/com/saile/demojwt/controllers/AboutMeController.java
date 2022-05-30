@@ -44,9 +44,8 @@ public class AboutMeController {
     }
 
     @GetMapping("{id}")
-    public AppAboutMe viewAboutMe(HttpServletRequest request) {
+    public AppAboutMe viewAboutMe(@PathVariable Long id, HttpServletRequest request) {
 
-        AppUser details = userService.fetchAuthenticatedUserFromRequest(request);
-        return aboutMeService.findById(details.getId()).orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
+        return aboutMeService.findById(id).orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
     }
 }

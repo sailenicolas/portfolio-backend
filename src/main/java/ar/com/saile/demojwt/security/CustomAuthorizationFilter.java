@@ -57,8 +57,6 @@ public class CustomAuthorizationFilter extends BasicAuthenticationFilter {
                     .build()
                     .verify(token);
             String[] roles = user.getClaim("roles").asArray(String.class);
-            System.out.println("roles = " + user.getClaim("roles"));
-
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(user, null, SecurityService.getAuthorities(roles));
             usernamePasswordAuthenticationToken

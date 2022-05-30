@@ -32,6 +32,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Boolean deleteById(Long id) {
 
-        return null;
+        projectRepository.deleteById(id);
+        return projectRepository.existsById(id);
     }
 }
