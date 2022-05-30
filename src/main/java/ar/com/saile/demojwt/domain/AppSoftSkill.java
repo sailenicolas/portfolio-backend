@@ -32,6 +32,14 @@ public class AppSoftSkill implements Serializable {
     private Long id;
 
     @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof AppSoftSkill that)) return false;
+        return getId().equals(that.getId());
+    }
+
+    @Override
     public String toString() {
 
         return "AppSoftSkill{" +
@@ -40,15 +48,6 @@ public class AppSoftSkill implements Serializable {
                 ", titulo='" + titulo + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) return true;
-        if (!(o instanceof AppSoftSkill)) return false;
-        AppSoftSkill that = (AppSoftSkill) o;
-        return getId().equals(that.getId());
     }
 
     @Override

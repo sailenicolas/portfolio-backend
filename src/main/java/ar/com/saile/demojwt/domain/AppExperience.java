@@ -45,15 +45,8 @@ public class AppExperience implements Serializable {
     public boolean equals(Object o) {
 
         if (this == o) return true;
-        if (!(o instanceof AppExperience)) return false;
-        AppExperience that = (AppExperience) o;
+        if (!(o instanceof AppExperience that)) return false;
         return getId().equals(that.getId());
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getId());
     }
 
     @Override
@@ -69,6 +62,12 @@ public class AppExperience implements Serializable {
                 ", fin=" + fin +
                 ", ubicacion='" + ubicacion + '\'' +
                 '}';
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId());
     }
 
     @NotNull

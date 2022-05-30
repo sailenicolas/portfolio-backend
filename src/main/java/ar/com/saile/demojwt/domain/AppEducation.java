@@ -43,8 +43,7 @@ public class AppEducation implements Serializable {
     public boolean equals(Object o) {
 
         if (this == o) return true;
-        if (!(o instanceof AppEducation)) return false;
-        AppEducation that = (AppEducation) o;
+        if (!(o instanceof AppEducation that)) return false;
         return getId().equals(that.getId());
     }
 
