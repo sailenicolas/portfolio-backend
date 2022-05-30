@@ -37,6 +37,21 @@ public class AppAboutMe implements Serializable {
     @NotBlank
     private String nombre;
 
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof AppAboutMe)) return false;
+        AppAboutMe that = (AppAboutMe) o;
+        return getId().equals(that.getId()) && getEmail().equals(that.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId(), getEmail());
+    }
+
     private String ubicacion;
 
     @Column(unique = true, nullable = false)
@@ -73,17 +88,4 @@ public class AppAboutMe implements Serializable {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-
-        if (this == o) return true;
-        if (!(o instanceof AppAboutMe that)) return false;
-        return getId().equals(that.getId()) && getEmail().equals(that.getEmail());
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getId(), getEmail(), getAppUser());
-    }
 }

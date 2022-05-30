@@ -29,18 +29,25 @@ public class AppProject implements Serializable {
         this.descripcion = descripcion;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = ID_COLUMN, nullable = false)
-    private Long id;
-
     @Override
     public boolean equals(Object o) {
 
         if (this == o) return true;
-        if (!(o instanceof AppProject that)) return false;
+        if (!(o instanceof AppProject)) return false;
+        AppProject that = (AppProject) o;
         return getId().equals(that.getId());
     }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId());
+    }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = ID_COLUMN, nullable = false)
+    private Long id;
 
     @Override
     public String toString() {
@@ -51,12 +58,6 @@ public class AppProject implements Serializable {
                 ", imagen='" + imagen + '\'' +
                 ", descripcion='" + descripcion + '\'' +
                 '}';
-    }
-
-    @Override
-    public int hashCode() {
-
-        return Objects.hash(getId());
     }
 
     @Column(nullable = false)
