@@ -15,12 +15,18 @@ spring:
   jpa:
       properties:
         hibernate:
-          dialect: org.hibernate.dialect.MySQL8Dialect
+          jdbc:
+            lob:
+              non_contextual_creation: true
+          dialect: ${DB_DIALECT}
           format_sql: true
       show-sql: false
       open-in-view: true
       hibernate:
         ddl-auto: create
+  sql:
+    init:
+      mode: always
 app:
   secret: "${PREFERABLE_KEY_SIZE}"
 logging:
