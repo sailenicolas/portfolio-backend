@@ -1,7 +1,7 @@
 package ar.com.saile.demojwt.security;
 
+import ar.com.saile.demojwt.domain.AppUser;
 import ar.com.saile.demojwt.service.SecurityService;
-import ar.com.saile.demojwt.service.UserServiceImpl;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
@@ -24,12 +24,9 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 @Component
 public class CustomAuthorizationFilter extends BasicAuthenticationFilter {
 
-    private final UserServiceImpl userDetailsService;
-
-    public CustomAuthorizationFilter(AuthenticationManager authenticationManager, UserServiceImpl userDetailsService) {
+    public CustomAuthorizationFilter(AuthenticationManager authenticationManager) {
 
         super(authenticationManager);
-        this.userDetailsService = userDetailsService;
     }
 
     @Override
@@ -60,7 +57,7 @@ public class CustomAuthorizationFilter extends BasicAuthenticationFilter {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                     new UsernamePasswordAuthenticationToken(user, null, SecurityService.getAuthorities(roles));
             usernamePasswordAuthenticationToken
-                    .setDetails(userDetailsService.findByUsername(user.getSubject()));
+                    .setDetails(new AppUser(user.getSubject()));
             return usernamePasswordAuthenticationToken;
         }
         return null;

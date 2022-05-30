@@ -1,6 +1,5 @@
 package ar.com.saile.demojwt.security;
 
-import ar.com.saile.demojwt.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -27,7 +27,7 @@ public class CustomWebSecurity extends WebSecurityConfigurerAdapter {
 
     static final String API_V_1 = "/api/v1/";
 
-    private final UserServiceImpl userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -46,7 +46,7 @@ public class CustomWebSecurity extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers(LOGIN_URL).permitAll();
         http.addFilter(customAuthenticationFilter);
-        http.addFilter(new CustomAuthorizationFilter(authenticationManager(), userDetailsService));
+        http.addFilter(new CustomAuthorizationFilter(authenticationManager()));
         http.authorizeRequests().antMatchers(HttpMethod.POST, API_V_1 + "user/**").hasAnyRole("ADMIN", "SUPER_ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.POST, API_V_1 + "role/**").hasAnyRole("ADMIN", "SUPER_ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
