@@ -27,3 +27,5 @@ logging:
   level:
     sql: info
     web: info
+server:
+  port: ${PORT:8080}
