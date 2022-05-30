@@ -1,0 +1,261 @@
+openapi: "3.0.3"
+info:
+  title: "demojwt API"
+  description: "demojwt API"
+  version: "1.0.0"
+servers:
+  - url: "https://demojwt"
+paths:
+  /api/v1/user/me:
+    get:
+      summary: "GET api/v1/user/me"
+      operationId: "getAppUser"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/register:
+    post:
+      summary: "POST api/v1/user/register"
+      operationId: "addUser"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/role:
+    post:
+      summary: "POST api/v1/user/role"
+      operationId: "addRole"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/roleToUser:
+    post:
+      summary: "POST api/v1/user/roleToUser"
+      operationId: "RoleToUser"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/token/refresh:
+    get:
+      summary: "GET api/v1/user/token/refresh"
+      operationId: "refreshToken"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/users:
+    get:
+      summary: "GET api/v1/user/users"
+      operationId: "getUsers"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/aboutMe/{id}:
+    get:
+      summary: "GET api/v1/user/aboutMe/{id}"
+      operationId: "viewAboutMe"
+      parameters:
+        - name: "id"
+          in: "path"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT api/v1/user/aboutMe/{id}"
+      operationId: "editAboutMe"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/experiences/:
+    post:
+      summary: "POST api/v1/user/experiences/"
+      operationId: "createExperience"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/experiences/{id}:
+    get:
+      summary: "GET api/v1/user/experiences/{id}"
+      operationId: "viewExperience"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT api/v1/user/experiences/{id}"
+      operationId: "editExperience"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE api/v1/user/experiences/{id}"
+      operationId: "deleteExperience"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/softskills/:
+    post:
+      summary: "POST api/v1/user/softskills/"
+      operationId: "createSoftSkills"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/softskills/{id}:
+    get:
+      summary: "GET api/v1/user/softskills/{id}"
+      operationId: "viewSoftSkills"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT api/v1/user/softskills/{id}"
+      operationId: "editSoftSkills"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE api/v1/user/softskills/{id}"
+      operationId: "deleteSoftSkills"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/educations/:
+    post:
+      summary: "POST api/v1/user/educations/"
+      operationId: "createEducation"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/educations/{id}:
+    get:
+      summary: "GET api/v1/user/educations/{id}"
+      operationId: "viewEducation"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT api/v1/user/educations/{id}"
+      operationId: "editEducation"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE api/v1/user/educations/{id}"
+      operationId: "deleteEducation"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/projects/:
+    post:
+      summary: "POST api/v1/user/projects/"
+      operationId: "createProjects"
+      responses:
+        "200":
+          description: "OK"
+  /api/v1/user/projects/{id}:
+    get:
+      summary: "GET api/v1/user/projects/{id}"
+      operationId: "viewProjects"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    put:
+      summary: "PUT api/v1/user/projects/{id}"
+      operationId: "editProjects"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
+    delete:
+      summary: "DELETE api/v1/user/projects/{id}"
+      operationId: "deleteProjects"
+      parameters:
+        - name: "id"
+          in: "path"
+          required: true
+          schema:
+            type: "number"
+            format: "int64"
+      responses:
+        "200":
+          description: "OK"
