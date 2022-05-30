@@ -33,13 +33,12 @@ public class CustomWebSecurity extends WebSecurityConfigurerAdapter {
 
     private final CustomExceptionHandler customExceptionHandler;
 
-    public static String LOGIN_URL;
+    public final static String LOGIN_URL = API_V_1 + "user/login";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
-        LOGIN_URL = API_V_1 + "user/login";
         customAuthenticationFilter.setFilterProcessesUrl(LOGIN_URL);
         http.csrf().disable();
         http.cors().configurationSource(corsConfigurationSource());
