@@ -9,7 +9,7 @@ spring:
       on-profile: dev
     name: dev
   datasource:
-    url: ${DB_URL:jdbc:mysql://localhost:3306/JwTBackend?createDatabaseIfNotExist=true}
+    url: ${DB_URL}
     username: ${USER}
     password: ${PASSWORD}
   jpa:
