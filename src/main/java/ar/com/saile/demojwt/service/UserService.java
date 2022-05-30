@@ -32,6 +32,6 @@ public interface UserService {
 
     void addUserToAboutMe(AppAboutMe appAboutMe);
 
-    AppUser fetchCurrentUser(HttpServletRequest request);
+    AppUser fetchAuthenticatedUserFromRequest(HttpServletRequest request);
 
 }

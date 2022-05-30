@@ -1,8 +1,9 @@
 package ar.com.saile.demojwt.controllers;
 
-import ar.com.saile.demojwt.domain.*;
+import ar.com.saile.demojwt.domain.AppRole;
+import ar.com.saile.demojwt.domain.AppUser;
 import ar.com.saile.demojwt.exceptions.RecordNotFoundException;
-import ar.com.saile.demojwt.service.*;
+import ar.com.saile.demojwt.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,16 +25,6 @@ public class UserController {
 
     private final UserService userService;
 
-    private final EducationService educationService;
-
-    private final ProjectService projectService;
-
-    private final ExperienceService experienceService;
-
-    private final SoftSkillService softSkillService;
-
-    private final AboutMeService aboutMeService;
-
     @PostMapping("/register")
     public AppUser addUser(@RequestBody AppUser appUser) {
 
@@ -42,11 +33,11 @@ public class UserController {
 
     @GetMapping("/me")
     @Transactional
-    public Object getAppUser(HttpServletRequest request) {
+    public AppUser getAppUser(HttpServletRequest request) {
 
-        AppUser appUser = userService.fetchCurrentUser(request);
+        AppUser appUser = userService.fetchAuthenticatedUserFromRequest(request);
         Optional<AppUser> appUserUs = userService.findByUsername(appUser);
-        return appUserUs.orElse(null);
+        return appUserUs.orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
     }
 
     @PostMapping("/role")
@@ -72,68 +63,6 @@ public class UserController {
     @GetMapping("/token/refresh")
     public void refreshToken() {
 
-    }
-
-    @PostMapping("/experience/{id}")
-    public void editExperience(@PathVariable Integer id) {
-
-        System.out.println("id = " + id);
-    }
-
-    @PostMapping("/education/{id}")
-    public void editEducation(@PathVariable Integer id) {
-
-        System.out.println("id = " + id);
-    }
-
-    @PostMapping("/softskills/{id}")
-    public void editSoftSkills(@PathVariable Integer id) {
-
-        System.out.println("id = " + id);
-    }
-
-    @PostMapping("/aboutMe")
-    public void editAboutMe() {
-
-
-    }
-
-    @PostMapping("/projects/{id}")
-    public AppProject editProjects(@PathVariable Long id) {
-
-        return projectService.findById(id).get();
-    }
-
-    @GetMapping("/experience/{id}")
-    public AppExperience viewExperience(@PathVariable Long id) {
-
-        return experienceService.findById(id).orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
-
-    }
-
-    @GetMapping("/education/{id}")
-    public AppEducation viewEducation(@PathVariable Long id) {
-
-        return educationService.findById(id).orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
-    }
-
-    @GetMapping("/softskills/{id}")
-    public AppSoftSkill viewSoftSkills(@PathVariable Long id) {
-
-        return softSkillService.findById(id).orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
-    }
-
-    @GetMapping("/projects/{id}")
-    public AppProject viewProjects(@PathVariable Long id) {
-
-        return projectService.findById(id).orElseThrow(() -> new RecordNotFoundException("NOT FOUND"));
-    }
-
-    @GetMapping("/about")
-    public Optional<AppAboutMe> viewAboutMe(HttpServletRequest request) {
-
-        AppUser details = userService.fetchCurrentUser(request);
-        return aboutMeService.findById(details.getId());
     }
 
 }

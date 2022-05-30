@@ -9,4 +9,6 @@ public interface ExperienceService {
     AppExperience saveExperience(AppExperience appExperience);
 
     Optional<AppExperience> findById(Long id);
+
+    Boolean deleteById(Long id);
 }

@@ -28,4 +28,11 @@ public class ExperienceServiceImpl implements ExperienceService {
 
         return experienceRepository.findById(id);
     }
+
+    @Override
+    public Boolean deleteById(Long id) {
+
+        experienceRepository.deleteById(id);
+        return experienceRepository.existsById(id);
+    }
 }

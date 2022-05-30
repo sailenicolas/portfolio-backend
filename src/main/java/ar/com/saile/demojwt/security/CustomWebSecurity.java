@@ -12,6 +12,13 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -24,19 +31,37 @@ public class CustomWebSecurity extends WebSecurityConfigurerAdapter {
 
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    private final CustomExceptionHandler customExceptionHandler;
+
+    public final static String LOGIN_URL = API_V_1 + "user/login";
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
-        customAuthenticationFilter.setFilterProcessesUrl(API_V_1 + "user/login");
+        customAuthenticationFilter.setFilterProcessesUrl(LOGIN_URL);
         http.csrf().disable();
+        http.cors().configurationSource(corsConfigurationSource());
+        http.addFilterBefore(customExceptionHandler, LogoutFilter.class);
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests().antMatchers(API_V_1 + "user/login").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, API_V_1 + "user/**").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.POST, API_V_1 + "role/**").hasRole("ADMIN");
-        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests().antMatchers(LOGIN_URL).permitAll();
         http.addFilter(customAuthenticationFilter);
         http.addFilter(new CustomAuthorizationFilter(authenticationManager()));
+        http.authorizeRequests().antMatchers(HttpMethod.POST, API_V_1 + "user/**").hasAnyRole("ADMIN", "SUPER_ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, API_V_1 + "role/**").hasAnyRole("ADMIN", "SUPER_ADMIN");
+        http.authorizeRequests().anyRequest().authenticated();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:4200", "https://jwt-frontend-38da0.web.app"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Override

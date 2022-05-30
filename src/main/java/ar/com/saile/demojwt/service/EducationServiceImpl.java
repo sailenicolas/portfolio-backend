@@ -28,4 +28,11 @@ public class EducationServiceImpl implements EducationService {
         return educationRepository.findById(id);
     }
 
+    @Override
+    public Boolean deleteById(Long id) {
+
+        educationRepository.deleteById(id);
+        return educationRepository.existsById(id);
+    }
+
 }

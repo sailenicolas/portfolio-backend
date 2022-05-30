@@ -5,10 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 @NoArgsConstructor
@@ -22,23 +28,69 @@ public class AppAboutMe implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Nullable
     private String imagen;
 
+    @Nullable
     private String header;
 
-    private String aboutMe;
+    @NotNull
+    @NotBlank
+    private String sobremi;
 
-    private String name;
+    @NotNull
+    @NotBlank
+    private String nombre;
+
+    @Override
+    public boolean equals(Object o) {
+
+        if (this == o) return true;
+        if (!(o instanceof AppAboutMe)) return false;
+        AppAboutMe that = (AppAboutMe) o;
+        return getId().equals(that.getId()) && getEmail().equals(that.getEmail());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getId(), getEmail());
+    }
+
+    private String ubicacion;
+
+    @Column(unique = true, nullable = false)
+    @Email(message = "Email no valido")
+    @NotNull
+    @NotEmpty
+    private String email;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JsonBackReference
     private AppUser appUser;
 
-    public AppAboutMe(String imagen, String header, String aboutMe, String name) {
+    public AppAboutMe(String imagen, String header, String aboutMe, String name, String ubicacion, String email) {
 
         this.imagen = imagen;
         this.header = header;
-        this.aboutMe = aboutMe;
-        this.name = name;
+        this.sobremi = aboutMe;
+        this.nombre = name;
+        this.ubicacion = ubicacion;
+        this.email = email;
     }
+
+    @Override
+    public String toString() {
+
+        return "AppAboutMe{" +
+                "id=" + id +
+                ", imagen='" + imagen + '\'' +
+                ", header='" + header + '\'' +
+                ", sobremi='" + sobremi + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", ubicacion='" + ubicacion + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
 }

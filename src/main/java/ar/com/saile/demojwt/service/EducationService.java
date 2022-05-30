@@ -9,4 +9,7 @@ public interface EducationService {
     AppEducation saveEducation(AppEducation appEducation);
 
     Optional<AppEducation> findById(Long id);
+
+    Boolean deleteById(Long id);
+
 }
