@@ -13,17 +13,56 @@ spring:
     username: ${USER}
     password: ${PASSWORD}
   jpa:
-      properties:
-        hibernate:
-          jdbc:
-            lob:
-              non_contextual_creation: true
-          dialect: ${DB_DIALECT}
-          format_sql: true
-      show-sql: false
-      open-in-view: true
+    properties:
       hibernate:
-        ddl-auto: create
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: ${DB_DIALECT}
+        format_sql: true
+    show-sql: false
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+  sql:
+    init:
+      mode: always
+app:
+  secret: "${PREFERABLE_KEY_SIZE}"
+logging:
+  level:
+    sql: info
+    web: info
+    org:
+      springframework: debug
+    ar:
+      com:
+        saile: debug
+server:
+  port: ${PORT:8080}
+---
+debug: false
+spring:
+  config:
+    activate:
+      on-profile: test
+    name: test
+  datasource:
+    url: jdbc:h2:mem:testdb;MODE=MySQL
+    username: ${USER}
+    password: ${PASSWORD}
+  jpa:
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+    show-sql: false
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
   sql:
     init:
       mode: always
