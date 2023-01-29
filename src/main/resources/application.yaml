@@ -20,7 +20,7 @@ spring:
             non_contextual_creation: true
         dialect: ${DB_DIALECT}
         format_sql: true
-    show-sql: false
+    show-sql: true
     open-in-view: true
     hibernate:
       ddl-auto: create
